@@ -1,0 +1,225 @@
+progress { border:none;outline:none;width:100%;margin: 0px;border:0; height:20px; }
+
+/* CSS (Attempt 1) */
+
+
+progress::-webkit-progress-bar { background-color: #fff; border-radius: 9px;}
+progress::-webkit-progress-value { background: #fff; border-radius: 9px;}
+progress::-moz-progress-bar { background: #fff; border-radius: 9px;}
+
+.percentage{
+    float: left;
+    margin-left:3px;
+    margin-top: -20px;
+    position: absolute;
+    display: block;
+    color: #000;
+}
+
+progress {
+	display:block;
+	/*-webkit-appearance: none;*/
+}
+
+progress::-webkit-progress-bar {
+	background: black;
+	padding: 2px;
+}
+progress::-moz-progress-bar {  
+	background: black;
+	padding: 2px;
+} 
+
+progress::-webkit-progress-value {
+	background:orange;
+}
+
+td{vertical-align: middle !important;}
+.blink{
+	 animation: color-change 1s infinite step-end;
+	 
+}
+.dropdown-menu{
+	border:none !important;
+}
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: none ;
+}
+@keyframes color-change {
+        0% { color: white; background:black; }
+        50% { color: black; background:#C0C0C0; }
+        100% { color: white;  background:black;}
+    }
+
+input[type=text][disabled] {
+    background-color: #aaa;
+}
+
+.btn-secondary.disabled, .btn-secondary:disabled {
+    color: #000  !important;
+    background-color: #aaa !important;
+    border-color: #aaa  !important;
+    opacity:1 !important;
+}
+
+
+
+	.black{color:#000  !important;} .bblack{background-color:#000 !important;}
+	.blue{color:#0000FF  !important;} .bblue{background-color:#0000FF !important;}
+	.red{color:#FF0000 !important;} .bred{background-color:#FF0000 !important;}
+	.magenta{color:#FF00FF !important;} .bmagenta{background-color:#FF00FF !important;}
+	.green{color:#00FF00 !important;} .bgreen{background-color:#00FF00 !important;}
+	.cyan{color:#00FFFF !important;} .bcyan{background-color:#00FFFF !important;}
+	.yellow{color:#FFFF00 !important;} .byellow{background-color:#FFFF00 !important;}
+	.white{color:#FFFFFF !important;} .bwhite{background-color:#FFFFFF !important;}
+	.bright0 {
+ 	   filter: brightness(85%);
+	}	
+
+	*{border-radius:0 !important;}
+
+	table.list span, table.list a{padding: 2px 10px;}
+		
+	button{cursor:pointer !important; border:none !important;}
+	.alert{border:none !important; padding:0px 10px !important; height:auto;}
+	.tr{text-align: right;padding:2px 5px;}
+	footer{
+		 /*position: fixed;*/
+		/* border-top:2px solid #000;*/
+		 padding-top:15px;
+		 margin-top:15px;
+	    bottom: 0;
+
+	    
+	}
+
+	@font-face {font-family: "DOS";
+		src: url("//db.onlinewebfonts.com/t/eda37649a83ed1fa439107d571f4f0b9.eot");
+		src: url("//db.onlinewebfonts.com/t/eda37649a83ed1fa439107d571f4f0b9.eot?#iefix") format("embedded-opentype"),
+		url("//db.onlinewebfonts.com/t/eda37649a83ed1fa439107d571f4f0b9.woff2") format("woff2"),
+		url("//db.onlinewebfonts.com/t/eda37649a83ed1fa439107d571f4f0b9.woff") format("woff"),
+		url("//db.onlinewebfonts.com/t/eda37649a83ed1fa439107d571f4f0b9.ttf") format("truetype"),
+		url("//db.onlinewebfonts.com/t/eda37649a83ed1fa439107d571f4f0b9.svg#ZX-Spectrum") format("svg");
+	}
+
+	.btn:before, .btn:after{content:"";}
+
+
+	/*html, body {font-size:36px;}*/
+	html, body {
+		font-size:16px;
+		letter-spacing:0px; 
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;font-smooth: never;
+		background-color:#C0C0C0;
+		color:#000;
+
+		 display: flex;
+	    min-height: 100vh;
+	    flex-direction: column;		
+	}
+	.content {
+	    flex: 1;
+	}
+	*{letter-spacing:0px;}
+	.dropdown-menu{font-size:inherit !important;}
+	/*h3{font-size:24px;}*/
+
+	body {
+	    font-family: DOS, Monaco, Menlo, Consolas, "Courier New", monospace;	    
+	    line-height: inherit;
+	}
+	table th{font-weight: 300;}
+
+
+	input[type=checkbox], input[type=radio]{display:none;}
+
+	input[type="checkbox"] + span {
+		display:inline-block;
+	}
+
+
+	input[type=checkbox] + span:before {
+		content:"[ ";
+		background-color:white;
+
+	}
+	input[type=checkbox] + span:after{
+		content:"]";background-color:white;
+		margin-right:10px;
+	}
+	input[type=checkbox]:checked + span:before {
+		content:"[X";
+	}
+
+	 input[type=radio] + span:before {
+		content:"[ ";
+			background-color:white;
+
+	}
+	input[type=radio] + span:after{
+		content:"]";
+			background-color:white;
+
+	}
+	input[type=radio]:checked + span:before {
+		content:"[O";      
+	}
+
+	input[type=text], input[type=text]:focus, input[type=password], select{
+	 /* background-color:transparent;*/
+		border:none !important;        
+		border-radius:0 !important;
+		color:#000;
+		padding:0px 4px;	
+    	height: inherit;
+	}
+	input[type=text][disabled]{
+		background-color: #aaa;
+	}
+
+	.btn{line-height:inherit;vertical-align:top; padding:3px 5px;box-shadow:none; background-color:#00C0C0; color:#000;height:auto;}
+	.btn::first-letter {
+		color:inherit;
+	 }
+	 .jumbotron{margin:10px 0px; border-color:#000; color:#000; font-size:16px; padding:16px; line-height:auto;}
+	 .jumbotron p{font-size:inherit;color:#000;}
+
+	 .table{border:2px solid #000;}
+	 .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+border: 2px solid #000;}
+	#table-explorer td{
+		white-space: normal;
+    	word-break: break-word;
+    	color:#000;
+    }
+    .x-close{ padding:2px 2px 2px 4px;}
+
+	thead th{background-color: #000; color:#fff;}
+	.h5, h5 {
+	    font-size: 1.5rem;
+	}
+
+	.btn-dir:hover{text-decoration: none;}
+
+		.host-element{color:#000;padding:2px 5px; /*margin-top:10px;*/ background-color:#fff; padding:0px 4px; }
+		.host-element:hover{background-color:#545b62;color:#fff;}
+		#dropdown-hosts-list {border:none;background-color:transparent;}
+		.dropdown-toggle:after{
+			float: right;
+    		margin-top: 7px;
+    		margin-right: 2px;
+		}
+		.btn-secondary.focus, .btn-secondary:focus {
+		    box-shadow: none !important;
+		}
+		.form-control:focus {
+			box-shadow: none !important;	
+		}
+		@media (max-width: 575.98px) {
+			#dropdown-hosts-list{
+		    	margin-top: 0;
+		    	padding-top: 0;
+		    }
+		}
