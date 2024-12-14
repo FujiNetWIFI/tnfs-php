@@ -195,6 +195,17 @@ class TNFS{
         }
     }
 
+    public function __sleep(){
+        return array('DEBUG', 'CONNECTION_ID', 'BUFFER', 'CONNECTED', 'SERVER_IP', 'SERVER_PORT', 'SEQUENCE');    
+    }
+
+    public function __wakeup(){
+        $this->createSocket();
+        if($this->socket == null){
+            $this->CONNECTED = false;
+        }
+    }
+
     // -----------------------------------------------------------------
     // DEVICE
     
