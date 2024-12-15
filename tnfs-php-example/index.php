@@ -444,13 +444,6 @@ error_reporting(E_ERROR | E_PARSE);
 
 	}
 
-function cmp($a, $b)
-{
-    return strcmp($a->name, $b->name);
-}
-
-usort($your_data, "cmp");
-
 ?>
 
 <!doctype html>
