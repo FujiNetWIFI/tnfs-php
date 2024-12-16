@@ -162,6 +162,7 @@ class TNFS{
     public $SERVER_IP         = 0;
     public $SERVER_PORT       = 0;
     public $SEQUENCE          = 0;  // sequence of call
+    public $PROTOCOL          = "tcp";
 
     private $socket           = null;
 
@@ -180,12 +181,13 @@ class TNFS{
 
     // -----------------------------------------------------------------
 
-    public function __construct($SERVER_IP, $SERVER_PORT){
+    public function __construct($SERVER_IP, $SERVER_PORT, $PROTOCOL = 'tcp'){
         
         $this->SERVER_IP = $SERVER_IP;
         $this->SERVER_PORT = $SERVER_PORT;
         $this->SEQUENCE = 0;
         $this->CONNECTED = true;
+        $this->PROTOCOL = $PROTOCOL;
 
         // create socket
         $this->createSocket();
@@ -196,7 +198,7 @@ class TNFS{
     }
 
     public function __sleep(){
-        return array('DEBUG', 'CONNECTION_ID', 'BUFFER', 'CONNECTED', 'SERVER_IP', 'SERVER_PORT', 'SEQUENCE');    
+        return array('DEBUG', 'CONNECTION_ID', 'BUFFER', 'CONNECTED', 'SERVER_IP', 'SERVER_PORT', 'SEQUENCE', 'PROTOCOL');    
     }
 
     public function __wakeup(){
@@ -1137,24 +1139,38 @@ class TNFS{
     }
 
     private function receive($length){
-        $ret = socket_recvfrom($this->socket, $this->BUFFER, $length, 0, $this->SERVER_IP, $this->SERVER_PORT); 
+        if ($this->PROTOCOL ===  'tcp') {
+            $ret = socket_recv($this->socket, $this->BUFFER, $length, 0);
+        } else {
+            $ret = socket_recvfrom($this->socket, $this->BUFFER, $length, 0, $this->SERVER_IP, $this->SERVER_PORT);
+        }
         return $ret;
     }
 
     private function send($msg){
-        socket_sendto($this->socket, $msg, strlen($msg), 0, $this->SERVER_IP, $this->SERVER_PORT);
+        if ($this->PROTOCOL === 'tcp') {
+            socket_send($this->socket, $msg, strlen($msg), 0);
+        } else {
+            socket_sendto($this->socket, $msg, strlen($msg), 0, $this->SERVER_IP, $this->SERVER_PORT);
+        }
     }
 
     private function createSocket(){
-        $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        if ($this->PROTOCOL == 'tcp') {
+            $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+            $result = socket_connect($this->socket, $this->SERVER_IP, $this->SERVER_PORT);
+            if ($result === FALSE) {
+                closeSocket();
+                $this->socket = FALSE;
+            }
+        } else {
+            $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        }
 
         socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, array('sec' => TNFS::$TIMEOUT, 'usec' => 0));
         socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, array('sec' => TNFS::$TIMEOUT, 'usec' => 0));
 
-        if($this->socket !== FALSE){
-            //socket_set_timeout($this->socket, 5);
-            //socket_set_nonblock($this->socket);
-            
+        if($this->socket !== FALSE) {      
             if($this->checkSocket() == ""){
                 $this->socket = null;
                 return null;
