@@ -40,8 +40,9 @@ error_reporting(E_ERROR | E_PARSE);
 			$path = $_REQUEST["path"];
 			$host = $_REQUEST["host"];
 			$port = $_REQUEST["port"];
+			$protocol = $_REQUEST["protocol"];
 
-			$tnfs = new TNFS($host, $port);	
+			$tnfs = new TNFS($host, $port, $protocol);	
 			$tnfs->mount();
 			// open file		
 			$res = $tnfs->open($path."/".$name, "w+", TNFS::$S_ALL);
@@ -61,7 +62,8 @@ error_reporting(E_ERROR | E_PARSE);
 		$path = $_REQUEST["path"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
-		$tnfs = new TNFS($host, $port);	
+		$protocol = $_REQUEST["protocol"];
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		$directory = $tnfs->opendir($path);
 		if($directory != null && $directory["Code"] == TNFS::$RET_SUCCESS){ ?>
@@ -69,6 +71,7 @@ error_reporting(E_ERROR | E_PARSE);
 			<form id="form-upload" enctype="multipart/form-data" style="display: none !important">
 			    <input type="hidden" name="host" value="<?php echo $host;?>"/>
 			    <input type="hidden" name="port" value="<?php echo $port;?>"/>
+			    <input type="hidden" name="protocol" value="<?php echo $protocol;?>"/>
 			    <input type="hidden" name="path" value="<?php echo $path;?>"/>
 			    <input name="upload-file-element" id="upload-file-element" type="file" />
 			    <input type="button" id="btn-upload-file" value="Upload" />
@@ -227,7 +230,8 @@ error_reporting(E_ERROR | E_PARSE);
 		$size = $_REQUEST["size"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
-		$tnfs = new TNFS($host, $port);	
+		$protocol = $_REQUEST["protocol"];
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		// open file		
 		$res = $tnfs->open($fullpath, "r", TNFS::$S_ALL);
@@ -258,13 +262,14 @@ error_reporting(E_ERROR | E_PARSE);
 		$size = $_REQUEST["size"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
+		$protocol = $_REQUEST["protocol"];
 
 
 
 		$name = "upload_file.txt";
 		//die($fullpath.$name);
 
-		$tnfs = new TNFS($host, $port);	
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		// open file		
 		$res = $tnfs->open($path."/".$name, "w+", TNFS::$S_ALL);
@@ -283,7 +288,8 @@ error_reporting(E_ERROR | E_PARSE);
 		$name = $_REQUEST["name"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
-		$tnfs = new TNFS($host, $port);	
+		$protocol = $_REQUEST["protocol"];
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		// $file has de full path of the file to rename
 		$res = $tnfs->mkdir($path."/".$name);
@@ -299,7 +305,8 @@ error_reporting(E_ERROR | E_PARSE);
 		$fullpath = $_REQUEST["fullpath"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
-		$tnfs = new TNFS($host, $port);	
+		$protocol = $_REQUEST["protocol"];
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		// $file has de full path of the file to rename
 		$res = $tnfs->rmdir($fullpath);
@@ -317,7 +324,8 @@ error_reporting(E_ERROR | E_PARSE);
 		$name = $_REQUEST["name"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
-		$tnfs = new TNFS($host, $port);	
+		$protocol = $_REQUEST["protocol"];
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		// $file has de full path of the file to rename
 		// $name ony the name
@@ -341,7 +349,8 @@ error_reporting(E_ERROR | E_PARSE);
 		$to = $_REQUEST["to"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
-		$tnfs = new TNFS($host, $port);	
+		$protocol = $_REQUEST["protocol"];
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		$file = basename($fullpath);  
 
@@ -360,7 +369,8 @@ error_reporting(E_ERROR | E_PARSE);
 		$file = $_REQUEST["file"];
 		$host = $_REQUEST["host"];
 		$port = $_REQUEST["port"];
-		$tnfs = new TNFS($host, $port);	
+		$protocol = $_REQUEST["protocol"];
+		$tnfs = new TNFS($host, $port, $protocol);	
 		$tnfs->mount();
 		$response = $tnfs->unlink($file);
 		if($response != null && $response["Code"] == TNFS::$RET_SUCCESS){
@@ -396,6 +406,7 @@ error_reporting(E_ERROR | E_PARSE);
 				$connection = null;
 				$host = "192.168.1.61";
 				$port = 16384;
+				$protocol = "tcp";
 			} else {
 			//	$host = "192.168.1.33";
 			//	$port = 16384;
@@ -417,11 +428,12 @@ error_reporting(E_ERROR | E_PARSE);
 		if(isset($_REQUEST["connect"])){
 			$host = $_REQUEST["host"];
 			$port = $_REQUEST["port"];
+			$protocol = $_REQUEST["protocol"];
 
 			if(!is_int($port)){$port=16384;}
 
 			
-			$tnfs = new TNFS($host, $port);		
+			$tnfs = new TNFS($host, $port, $protocol);		
 			if($tnfs->CONNECTED == true){
 
 				$connection = $tnfs->mount();			
@@ -441,6 +453,7 @@ error_reporting(E_ERROR | E_PARSE);
 		$connection = null;
 		$host = "192.168.1.61";
 		$port = 16384;
+		$protocol = "tcp";
 
 	}
 
@@ -556,7 +569,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	path: path,
 			            	name: name, 
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+			            	protocol: "<?php echo $protocol;?>"
 			            },
 			            beforeSend: function(response){
 			            	$("#new-folder-name").val('');
@@ -577,6 +591,7 @@ error_reporting(E_ERROR | E_PARSE);
 					$("#info-connecting").show();
 
 					$("#dropdown-hosts").html($("#host").val());
+					$("#dropdown-protocol").html($("#protocol").val());
 				});
 
 				$("#btn-disconnect").click(function(e){
@@ -592,10 +607,18 @@ error_reporting(E_ERROR | E_PARSE);
 					$("#dropdown-hosts").html($(this).text());
 				});
 
+				$("#dropdown-protocol-outer .protocol-element").click(function(e){
+					e.preventDefault();
+					$("#protocol").val($(this).text());
+					$("#dropdown-protocol").html($(this).text());
+				});
+
 				$('#dropdown').on('show.bs.dropdown', function () {
 					$("#host").val("").click().focus().select().focus();;
 				});
-
+				$('#dropdown-protocol-outer').on('show.bs.dropdown', function () {
+					$("#protocol").val("").click().focus().select().focus();;
+				});
 				
 				//$(".btn-content").on("click", function(e){
 				$(document).on("click", ".btn-content", function(e){
@@ -614,7 +637,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	size: size,
 			            	file: file,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            beforeSend: function(response){
 			            	$("#file-content").html('');
@@ -645,7 +669,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	size: size,
 			            	file: file,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            beforeSend: function(response){
 			            	$("#file-content").html('');
@@ -679,7 +704,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	file: file,
 			            	size: size,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            beforeSend: function() {
 					        $("#modal-download-filename").html(file + " ("+size+")");
@@ -724,7 +750,8 @@ error_reporting(E_ERROR | E_PARSE);
 							size: size,
 			            	to: to,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            beforeSend: function() {
 		           			
@@ -768,7 +795,8 @@ error_reporting(E_ERROR | E_PARSE);
 				            	fullpath: fullpath,
 				            	name: name,
 				            	host: "<?php echo $host;?>",
-				            	port: <?php echo $port;?>
+				            	port: <?php echo $port;?>,
+								protocol: "<?php echo $protocol;?>"
 				            },
 				            success: function(response)
 				            {
@@ -819,7 +847,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	action: "DEL",
 			            	file: fullpath,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            success: function(response)
 			            {
@@ -854,7 +883,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	action: "RMDIR",
 			            	fullpath: fullpath,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            success: function(response)
 			            {
@@ -887,7 +917,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	action:"OPENDIR",
 			            	path: path,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            beforeSend: function(){
 			            	$("#file-explorer").hide();
@@ -910,7 +941,8 @@ error_reporting(E_ERROR | E_PARSE);
 			            	action:"OPENDIR",
 			            	path: path,
 			            	host: "<?php echo $host;?>",
-			            	port: <?php echo $port;?>
+			            	port: <?php echo $port;?>,
+							protocol: "<?php echo $protocol;?>"
 			            },
 			            beforeSend: function(){
 			            	$("#file-explorer").hide();
@@ -983,7 +1015,20 @@ error_reporting(E_ERROR | E_PARSE);
 								  </div>
 								</div>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-1">
+								<div id="dropdown-protocol-outer" class="dropdown" style="border:none">
+								  <button style="text-align:left;" class="form-control btn btn-secondary dropdown-toggle <?php if($tnfs != null && $tnfs->CONNECTED == true) echo " disabled ";?>" type="button" id="dropdown-protocol" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <?php echo $protocol;?>
+								  </button>
+								  <div id="dropdown-protocol-list" style="margin-top:-8px" class="form-control dropdown-menu" aria-labelledby="dropdown-protocol">
+								    <input autocomplete="off" style="height:auto;" type="text" <?php if($tnfs != null && $tnfs->CONNECTED == true) echo " disabled ";?> class="form-control mr-sm-2" value="<?php echo $protocol;?>" name="protocol" id="protocol" placeholder="tnfs protocol">                                  																		    
+								    <span href="#" style="background-color:#fff; padding:5px 0px" class="dropdown-item"><hr style="margin:0;border-top:2px solid #000"/></span>
+								    <a class="dropdown-item protocol-element" href="#">tcp</a>
+								    <a class="dropdown-item protocol-element" href="#">udp</a>							    								    
+								  </div>
+								</div>
+							</div>
+							<div class="col-md-1">
 									<input type="text" <?php if($tnfs != null && $tnfs->CONNECTED == true) echo " disabled ";?> class="form-control mb-2 mr-sm-2" value="<?php echo $port;?>" name="port" id="port" placeholder="port">                                  
 							</div>
 							<div class="col-md-3">
