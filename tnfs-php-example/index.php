@@ -5,11 +5,6 @@ error_reporting(E_ERROR | E_PARSE);
 
 	include("tnfs.php");
 	session_start();
-	/*$connection = null;
-	$host = "";
-	$sid = 0;
-	$tnfs = null;
-*/
 
 	function startsWith( $haystack, $needle ) {
 	     $length = strlen( $needle );
@@ -24,6 +19,22 @@ error_reporting(E_ERROR | E_PARSE);
 	    return substr( $haystack, -$length ) === $needle;
 	}
 
+	function connect() {
+		$host = $_REQUEST["host"];
+		$port = $_REQUEST["port"];
+		$protocol = $_REQUEST["protocol"];
+		$sid = null;
+		if (isset($_SESSION['sid'])) {
+			$sid = $_SESSION['sid'];
+		}
+		$tnfs = new TNFS($host, $port, $protocol, $sid);
+		$_SESSION['sid'] = $tnfs->CONNECTION_ID;
+		return $tnfs;
+	}
+
+	$host = $_REQUEST["host"];
+	$port = $_REQUEST["port"];
+	$protocol = $_REQUEST["protocol"];
 
 	$root_path = "C:/spectrum";
 	//$root_path = "/var/www/html/tnfs";
@@ -38,12 +49,7 @@ error_reporting(E_ERROR | E_PARSE);
 			$file_contents = file_get_contents($_FILES['upload-file-element']['tmp_name']);
 
 			$path = $_REQUEST["path"];
-			$host = $_REQUEST["host"];
-			$port = $_REQUEST["port"];
-			$protocol = $_REQUEST["protocol"];
-
-			$tnfs = new TNFS($host, $port, $protocol);	
-			$tnfs->mount();
+			$tnfs = connect();
 			// open file		
 			$res = $tnfs->open($path."/".$name, "w+", TNFS::$S_ALL);
 			$handle = $res["Handle"];
@@ -60,11 +66,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 	if(isset($_REQUEST["action"]) && $_REQUEST["action"] == "OPENDIR"){
 		$path = $_REQUEST["path"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		$directory = $tnfs->opendir($path);
 		if($directory != null && $directory["Code"] == TNFS::$RET_SUCCESS){ ?>
 
@@ -228,11 +230,7 @@ error_reporting(E_ERROR | E_PARSE);
 		$file = $_REQUEST["file"];
 		$fullpath = $_REQUEST["fullpath"];
 		$size = $_REQUEST["size"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		// open file		
 		$res = $tnfs->open($fullpath, "r", TNFS::$S_ALL);
 		$handle = $res["Handle"];
@@ -260,17 +258,13 @@ error_reporting(E_ERROR | E_PARSE);
 		$file = $_REQUEST["file"];
 		$path = $_REQUEST["path"];
 		$size = $_REQUEST["size"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
 
 
 
 		$name = "upload_file.txt";
 		//die($fullpath.$name);
 
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		// open file		
 		$res = $tnfs->open($path."/".$name, "w+", TNFS::$S_ALL);
 		$handle = $res["Handle"];
@@ -286,11 +280,7 @@ error_reporting(E_ERROR | E_PARSE);
 	if(isset($_REQUEST["action"]) && $_REQUEST["action"] == "MKDIR"){
 		$path = $_REQUEST["path"];
 		$name = $_REQUEST["name"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		// $file has de full path of the file to rename
 		$res = $tnfs->mkdir($path."/".$name);
 		if($res != null && $res["Code"] == TNFS::$RET_SUCCESS){
@@ -303,11 +293,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 	if(isset($_REQUEST["action"]) && $_REQUEST["action"] == "RMDIR"){
 		$fullpath = $_REQUEST["fullpath"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		// $file has de full path of the file to rename
 		$res = $tnfs->rmdir($fullpath);
 
@@ -322,11 +308,7 @@ error_reporting(E_ERROR | E_PARSE);
 	if(isset($_REQUEST["action"]) && $_REQUEST["action"] == "RENAME"){
 		$fullpath = $_REQUEST["fullpath"];
 		$name = $_REQUEST["name"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		// $file has de full path of the file to rename
 		// $name ony the name
 		// must join together and create the fullpath with the new name
@@ -347,11 +329,7 @@ error_reporting(E_ERROR | E_PARSE);
 		$fullpath = $_REQUEST["fullpath"];
 		$name = $_REQUEST["name"];
 		$to = $_REQUEST["to"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		$file = basename($fullpath);  
 
 		$response = $tnfs->rename($fullpath, $to."/".$file);
@@ -367,11 +345,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 	if(isset($_REQUEST["action"]) && $_REQUEST["action"] == "DEL"){
 		$file = $_REQUEST["file"];
-		$host = $_REQUEST["host"];
-		$port = $_REQUEST["port"];
-		$protocol = $_REQUEST["protocol"];
-		$tnfs = new TNFS($host, $port, $protocol);	
-		$tnfs->mount();
+		$tnfs = connect();
 		$response = $tnfs->unlink($file);
 		if($response != null && $response["Code"] == TNFS::$RET_SUCCESS){
 			echo "1";
@@ -394,16 +368,15 @@ error_reporting(E_ERROR | E_PARSE);
 			if($tnfs != null){
 				//echo "DESCO";
 				//$disconnect = true;
-				//$umount = $tnfs->umount();
+				$tnfs->umount();
 				$tnfs->destroy();
-				unset($_SESSION["tnfs"]);
 				unset($_SESSION["sid"]);
 				session_unset();
 				session_destroy();
 				$tnfs->CONNECTED == false;
 				//$tnfs = null;
 				$sid = 0;
-				$connection = null;
+				$connected = false;
 				$host = "192.168.1.61";
 				$port = 16384;
 				$protocol = "tcp";
@@ -418,39 +391,10 @@ error_reporting(E_ERROR | E_PARSE);
 	//var_dump($_REQUEST);
 
 	if(isset($_REQUEST["connect"]) ){
-
-		if(isset($_SESSION["tnfs"])){
-			$tnfs = $_SESSION["tnfs"];
-			$sid = $_SESSION["sid"];
-		}
-
-
-		if(isset($_REQUEST["connect"])){
-			$host = $_REQUEST["host"];
-			$port = $_REQUEST["port"];
-			$protocol = $_REQUEST["protocol"];
-
-			if(!is_int($port)){$port=16384;}
-
-			
-			$tnfs = new TNFS($host, $port, $protocol);		
-			if($tnfs->CONNECTED == true){
-
-				$connection = $tnfs->mount();			
-				$sid = $connection["SID"];
-				$_SESSION["tnfs"] = $tnfs;
-				$_SESSION["sid"] = $sid;
-			} else {
-				$connection = null;
-			}
-
-		} 
-
-		
-		
-
+		$tnfs = connect();
+		$connected = true;
 	} else {
-		$connection = null;
+		$connected = false;
 		$host = "192.168.1.61";
 		$port = 16384;
 		$protocol = "tcp";
@@ -957,7 +901,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 				};
 
-				<?php if($connection !=null) { ?>
+				<?php if($connected) { ?>
 					load();
 				<?php } ?>
 
@@ -1032,7 +976,7 @@ error_reporting(E_ERROR | E_PARSE);
 									<input type="text" <?php if($tnfs != null && $tnfs->CONNECTED == true) echo " disabled ";?> class="form-control mb-2 mr-sm-2" value="<?php echo $port;?>" name="port" id="port" placeholder="port">                                  
 							</div>
 							<div class="col-md-3">
-								<?php if($connection == null){ ?>
+								<?php if(!$connected){ ?>
 								<button class="form-control mb-2 btn btn-small bcyan black" id="btn-connect" name="connect" type="submit">Connect</button> 
 								<?php } else { ?>
 								<button class="form-control mb-2 btn btn-small bcyan black" id="btn-disconnect" name="disconnect" type="submit">Disconnect</button> 
@@ -1041,7 +985,7 @@ error_reporting(E_ERROR | E_PARSE);
 							<div class="col-md-3">
 								<div id="info-connecting" class="form-control mb-2 alert bblue white" style="display:none;padding:2px 10px">Connecting...</div>
 								<div id="info-disconnecting" class="form-control mb-2 alert bblue white" style="display:none;padding:2px 10px">Disconnecting...</div>
-								<?php if($connection != null && $connection["Code"] == TNFS::$RET_SUCCESS){ ?>
+								<?php if($connected){ ?>
 									<div id="info-connected" class="form-control mb-2 alert  bgreen black" style="padding:2px 10px">Connected!!!</div>
 								<?php } ?>
 								<?php if($tnfs != null && $tnfs->CONNECTED == false){ ?>
@@ -1055,7 +999,7 @@ error_reporting(E_ERROR | E_PARSE);
 				</div>
 			</div>
 
-			<?php if($disconnect == false && $connection != null){ ?>
+			<?php if($disconnect == false && $connected){ ?>
 			<div class="row">
 				<div class="col-md-12" id="file-explorer">
 				</div>
