@@ -56,6 +56,7 @@ error_reporting(E_ERROR | E_PARSE);
 			
 			// read all content and return as string
 			$content = $tnfs->write($handle, $file_contents);
+			$tnfs->close($handle);
 			
 			echo "1";
 	
@@ -136,6 +137,7 @@ error_reporting(E_ERROR | E_PARSE);
 						    }
 						    
 						} while($read["Code"] != TNFS::$RET_EOF);
+						$tnfs->closedir($directory["Handle"]);
 
 						
 						array_multisort( array_column($dirlist, "Filename"), SORT_ASC | SORT_FLAG_CASE | SORT_NATURAL , $dirlist );
@@ -237,6 +239,8 @@ error_reporting(E_ERROR | E_PARSE);
 		
 		// read all content and return as string
 		$content = $tnfs->readFile($handle, $size);
+		$tnfs->close($handle);
+
 		if($_REQUEST["action"] == "READFILE"){
 			echo $content;
 		}
@@ -271,6 +275,7 @@ error_reporting(E_ERROR | E_PARSE);
 		
 		// read all content and return as string
 		$content = $tnfs->write($handle, "hooola");
+		$tnfs->close($handle);
 
 		//echo $content;
 		
