@@ -181,13 +181,14 @@ class TNFS{
 
     // -----------------------------------------------------------------
 
-    public function __construct($SERVER_IP, $SERVER_PORT, $PROTOCOL = 'tcp'){
+    public function __construct($SERVER_IP, $SERVER_PORT, $PROTOCOL = 'tcp', $CONNECTION_ID = 0){
         
         $this->SERVER_IP = $SERVER_IP;
         $this->SERVER_PORT = $SERVER_PORT;
-        $this->SEQUENCE = 0;
+        $this->SEQUENCE = rand(0, 0xFF);
         $this->CONNECTED = true;
         $this->PROTOCOL = $PROTOCOL;
+        $this->CONNECTION_ID = $CONNECTION_ID;
 
         // create socket
         $this->createSocket();
@@ -1171,7 +1172,7 @@ class TNFS{
         socket_set_option($this->socket, SOL_SOCKET, SO_SNDTIMEO, array('sec' => TNFS::$TIMEOUT, 'usec' => 0));
 
         if($this->socket !== FALSE) {      
-            if($this->checkSocket() == ""){
+            if(!$this->checkSocket()){
                 $this->socket = null;
                 return null;
             }
@@ -1181,17 +1182,14 @@ class TNFS{
         return $this->socket;
     }
     private function checkSocket(){
-        $msg = $this->header(TNFS::$CMD_MOUNT);
-
-        //0x02 0x01 a: 0x00 0x00 0x00
-        $msg .= pack('CC',0x02, 0x01).".".pack('x').pack('CCC',0x00,0x00,0x00);
-
-        $this->send($msg);
-        $ret = $this->receive(9);
-
-        //var_dump("retorno : $ret");
-
-        return $ret;
+        if ($this->CONNECTION_ID !== 0) {
+            $ret = $this->free();
+            if (isset($ret['Code']) && $ret['Code'] != TNFS::$RET_INVALIDTNFSHANDLE) {
+                return true;
+            }
+        }
+        $ret = $this->mount();
+        return isset($ret['Code']) && $ret['Code'] == TNFS::$RET_SUCCESS;
     }
 
     private function closeSocket(){
