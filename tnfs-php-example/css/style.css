@@ -205,7 +205,10 @@ border: 2px solid #000;}
 
 		.host-element{color:#000;padding:2px 5px; /*margin-top:10px;*/ background-color:#fff; padding:0px 4px; }
 		.host-element:hover{background-color:#545b62;color:#fff;}
+		.protocol-element{color:#000;padding:2px 5px; /*margin-top:10px;*/ background-color:#fff; padding:0px 4px; }
+		.protocol-element:hover{background-color:#545b62;color:#fff;}
 		#dropdown-hosts-list {border:none;background-color:transparent;}
+		#dropdown-protocol-list {border:none;background-color:transparent;}
 		.dropdown-toggle:after{
 			float: right;
     		margin-top: 7px;
@@ -219,6 +222,10 @@ border: 2px solid #000;}
 		}
 		@media (max-width: 575.98px) {
 			#dropdown-hosts-list{
+		    	margin-top: 0;
+		    	padding-top: 0;
+		    }
+			#dropdown-protocol-list{
 		    	margin-top: 0;
 		    	padding-top: 0;
 		    }
