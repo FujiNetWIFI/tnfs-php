@@ -115,7 +115,7 @@ error_reporting(E_ERROR | E_PARSE);
 						do{
 						    $read = $tnfs->readdir($directory["Handle"]);
 						    
-						    if($read["Code"] != TNFS::$RET_EOF){
+						    if($read["Code"] == TNFS::$RET_SUCCESS){
 						        if($read["Filename"] == "." || $read["Filename"] == ".."){
 						            continue;
 						        }
@@ -137,7 +137,7 @@ error_reporting(E_ERROR | E_PARSE);
 						    		$filelist[] = $read;
 						    }
 						    
-						} while($read["Code"] != TNFS::$RET_EOF);
+						} while($read["Code"] == TNFS::$RET_SUCCESS);
 						$tnfs->closedir($directory["Handle"]);
 
 						

@@ -759,8 +759,7 @@ class TNFS{
         $pos = 0;
         do {
             $res = $this->read($handle, TNFS::$READ_BLOCK_SIZE);
-            //var_dump($res);
-            if($res["Code"] != TNFS::$RET_EOF){
+            if($res["Code"] == TNFS::$RET_SUCCESS){
                 $file_content .= $res["Content"];
                 $pos = $pos + $res["Length"];
                 if($pos < $filesize){
@@ -769,7 +768,7 @@ class TNFS{
                     break;
                 }
             }
-        } while($res["Code"] != TNFS::$RET_EOF);
+        } while($res["Code"] == TNFS::$RET_SUCCESS);
 
         return $file_content;
     }
