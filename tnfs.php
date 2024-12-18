@@ -1125,13 +1125,22 @@ class TNFS{
     // PRIVATE FUNCTIONS
     
     private function parseResponse($buffer, $format=""){
-        
         /* Unpack the header data */
-        $response = unpack($this->STANDARD_HEADER.$format, $buffer);
+        $response = unpack($this->STANDARD_HEADER, $buffer);
+        if ($response === false) {
+            $response = array('Code' => $RET_EPROTO, 'Command' => 0xFF);
+        }
 
         $response["Function"] = TNFS::$COMMANDS[$response["Command"]];
         $response["Response"] = TNFS::$RESPONSE[$response["Code"]];
-        
+
+        if ($format !== "") {
+            $extended_response = unpack($this->STANDARD_HEADER.$format, $buffer);
+            if ($extended_response !== false) {
+                $response = array_merge($response, $extended_response);
+            }
+        }
+
         return $response;
     }
 
@@ -1183,7 +1192,7 @@ class TNFS{
     }
     private function checkSocket(){
         if ($this->CONNECTION_ID !== 0) {
-            $ret = $this->free();
+            $ret = $this->stat('ping');
             if (isset($ret['Code']) && $ret['Code'] != TNFS::$RET_INVALIDTNFSHANDLE) {
                 return true;
             }
