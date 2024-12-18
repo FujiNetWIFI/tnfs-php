@@ -4,6 +4,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 
 	include("tnfs.php");
+	include("config.php");
 	session_start();
 
 	function startsWith( $haystack, $needle ) {
@@ -371,23 +372,13 @@ error_reporting(E_ERROR | E_PARSE);
 
 		if($tnfs != null && isset($_REQUEST["disconnect"])){
 			if($tnfs != null){
-				//echo "DESCO";
-				//$disconnect = true;
 				$tnfs->umount();
 				$tnfs->destroy();
 				unset($_SESSION["sid"]);
 				session_unset();
 				session_destroy();
 				$tnfs->CONNECTED == false;
-				//$tnfs = null;
 				$sid = 0;
-				$connected = false;
-				$host = "192.168.1.61";
-				$port = 16384;
-				$protocol = "tcp";
-			} else {
-			//	$host = "192.168.1.33";
-			//	$port = 16384;
 			}
 		} 
 
@@ -400,10 +391,9 @@ error_reporting(E_ERROR | E_PARSE);
 		$connected = true;
 	} else {
 		$connected = false;
-		$host = "192.168.1.61";
+		$host = TNFS_HOSTS[0];
 		$port = 16384;
 		$protocol = "tcp";
-
 	}
 
 ?>
@@ -946,21 +936,9 @@ error_reporting(E_ERROR | E_PARSE);
 								  <div id="dropdown-hosts-list" style="margin-top:-8px" class="form-control dropdown-menu" aria-labelledby="dropdown-hosts">
 								    <input autocomplete="off" style="height:auto;" type="text" <?php if($tnfs != null && $tnfs->CONNECTED == true) echo " disabled ";?> class="form-control mr-sm-2" value="<?php echo $host;?>" name="host" id="host" placeholder="tnfs host">                                  																		    
 								    <span href="#" style="background-color:#fff; padding:5px 0px" class="dropdown-item"><hr style="margin:0;border-top:2px solid #000"/></span>
-
-								    <a class="dropdown-item host-element" href="#">192.168.1.61</a>
-								    <a class="dropdown-item host-element" href="#">irata.online</a>
-								    <a class="dropdown-item host-element" href="#">zxnet.co.uk</a>
-									<a class="dropdown-item host-element" href="#">tnfs.bytedelight.com</a>								    
-								    <a class="dropdown-item host-element" href="#">vexed4.alioth.net</a>								    
-								    <a class="dropdown-item host-element" href="#">zx.kupo.be</a>	
-								    <a class="dropdown-item host-element" href="#">nihirash.net</a>									    
-								    <a class="dropdown-item host-element" href="#">tnfs.millhill.org</a>									    								    
-
-								    <a class="dropdown-item host-element" href="#">fujinet.online</a>									    								    
-								    <a class="dropdown-item host-element" href="#">tnfs.atari8bit.net</a>									    								    
-								    <a class="dropdown-item host-element" href="#">atari-apps.irata.online</a>									    								    
-								    <a class="dropdown-item host-element" href="#">homesoft.irata.online</a>									    								    
-								    <a class="dropdown-item host-element" href="#">fujinet.pl</a>									    								    
+									<?php foreach(TNFS_HOSTS as $host): ?>
+										<a class="dropdown-item host-element" href="#"><?php echo $host ?></a>
+									<?php endforeach ?>
 								  </div>
 								</div>
 							</div>
